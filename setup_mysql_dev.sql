@@ -9,3 +9,5 @@ GRANT ALL PRIVILEGES ON hbnb_dev_db.* TO 'hbnb_dev'@'localhost';
 
 -- Grant SELECT privilege on performance_schema database
 GRANT SELECT ON performance_schema.* TO 'hbnb_dev'@'localhost';
+
+-- More configurations Should be added below
