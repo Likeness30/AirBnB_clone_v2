@@ -10,13 +10,15 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
+
+
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
 
     # determines prompt for interactive/non-interactive modes
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
     model = model
-    
+
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
     types = {
              'number_rooms': int, 'number_bathrooms': int,
@@ -113,8 +115,6 @@ class HBNBCommand(cmd.Cmd):
 
         """This part does validation and parsing the
         arguments into and object that is usable"""
-        
-        
         new_instance = HBNBCommand.model[args]()
         storage.save()
         print(new_instance.id)
