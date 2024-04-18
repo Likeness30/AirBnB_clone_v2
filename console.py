@@ -3,26 +3,20 @@
 import cmd
 import sys
 from models.base_model import BaseModel
-from models.__init__ import storage
-from models.user import User
-from models.place import Place
-from models.state import State
-from models.city import City
 from models.amenity import Amenity
+from models.city import City
+from models.__init__ import storage, model
+from models.place import Place
 from models.review import Review
-
-
+from models.state import State
+from models.user import User
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
 
     # determines prompt for interactive/non-interactive modes
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
-
-    classes = {
-               'BaseModel': BaseModel, 'User': User, 'Place': Place,
-               'State': State, 'City': City, 'Amenity': Amenity,
-               'Review': Review
-              }
+    model = model
+    
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
     types = {
              'number_rooms': int, 'number_bathrooms': int,
@@ -114,43 +108,14 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(self, call, kwargs):
-        """ Create an object of any class"""
-        if not call:
-            print("** class name missing **")
-            return
-        elif call not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
+    def do_create(self, args):
+        print(model)
 
         """This part does validation and parsing the
         arguments into and object that is usable"""
-
-        for key, value in kwargs.items():
-            if isinstance(value, str):
-                # Replace underscores with spaces
-                # and handle escaping double quotes
-                value = value.replace('_', ' ').replace('\\"', '"')
-            elif isinstance(value, float):
-                # Validate and process float values
-                parts = value.split('.')
-                if len(parts) != 2:
-                    raise ValueError(f"Invalid float value: {value}")
-                try:
-                    value = float(value)
-                except ValueError:
-                    raise ValueError(f"Invalid float value: {value}")
-            elif isinstance(value, int):
-                # Validate and process integer values
-                try:
-                    value = int(value)
-                except ValueError:
-                    raise ValueError(f"Invalid integer value: {value}")
-            else:
-                raise ValueError(f"""Unsupported value
-                type for key '{key}': {type(value)}""")
-        processed_kwargs[key] = value
-        new_instance = HBNBCommand.classes[call](processed_kwargs)
+        
+        
+        new_instance = HBNBCommand.model[args]()
         storage.save()
         print(new_instance.id)
         storage.save()
@@ -174,7 +139,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
 
-        if c_name not in HBNBCommand.classes:
+        if c_name not in HBNBCommand.model:
             print("** class doesn't exist **")
             return
 
@@ -205,7 +170,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
 
-        if c_name not in HBNBCommand.classes:
+        if c_name not in HBNBCommand.model:
             print("** class doesn't exist **")
             return
 
@@ -232,7 +197,7 @@ class HBNBCommand(cmd.Cmd):
 
         if args:
             args = args.split(' ')[0]  # remove possible trailing args
-            if args not in HBNBCommand.classes:
+            if args not in HBNBCommand.model:
                 print("** class doesn't exist **")
                 return
             for k, v in storage._FileStorage__objects.items():
@@ -272,7 +237,7 @@ class HBNBCommand(cmd.Cmd):
         else:  # class name not present
             print("** class name missing **")
             return
-        if c_name not in HBNBCommand.classes:  # class name invalid
+        if c_name not in HBNBCommand.model:  # class name invalid
             print("** class doesn't exist **")
             return
 
