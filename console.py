@@ -111,13 +111,25 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, argument):
-        print(model)
-
         """This part does validation and parsing the
         arguments into and object that is usable"""
-        class_name, params = HBNBCommand.parse_params(argument)
-        new_instance = HBNBCommand.model[class_name](**params)
-        storage.save()
+
+        class_name, params = self.parse_params(argument)
+        new_instance = HBNBCommand.model[class_name]()
+        for key, val in params.items():
+            if val.startswith('"') and val.endswith('"'):
+                val = val[1:-1]
+                val = val.replace('\\"', '"')
+                val = val.replace('_', ' ')
+            elif '.' in val:
+
+                try:
+                    val = float(val)
+                except ValueError:
+                    pass
+            elif val.isdigit():
+                val = int(val)
+            setattr(new_instance, key, val)
         print(new_instance.id)
         storage.save()
 
@@ -314,8 +326,8 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
-    @staticmethod
-    def parse_params(params_str):
+
+    def parse_params(self, params_str):
         """Parse and check parameters string."""
         class_name = ''
         param = {}
@@ -327,10 +339,8 @@ class HBNBCommand(cmd.Cmd):
         param_obj = {}
         for i in range(len(param)):
             key, value = param[i].split('=')
-            value = value[1:-1]
             param_obj[key] = value
         return class_name, param_obj
-    
 
 
 if __name__ == "__main__":
