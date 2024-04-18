@@ -2,10 +2,10 @@
 """ Console Module """
 import cmd
 import sys
+from models import storage
 from models.base_model import BaseModel
 from models.amenity import Amenity
 from models.city import City
-from models.__init__ import storage, model
 from models.place import Place
 from models.review import Review
 from models.state import State
@@ -17,7 +17,7 @@ class HBNBCommand(cmd.Cmd):
 
     # determines prompt for interactive/non-interactive modes
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
-    model = model
+
 
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
     types = {
@@ -25,7 +25,12 @@ class HBNBCommand(cmd.Cmd):
              'max_guest': int, 'price_by_night': int,
              'latitude': float, 'longitude': float
             }
-
+    classes = {
+        'BaseModel': BaseModel, 'User': User, 'Place': Place,
+        'State': State, 'City': City, 'Amenity': Amenity,
+        'Review': Review
+    }
+    model = classes
     def preloop(self):
         """Prints if isatty is false"""
         if not sys.__stdin__.isatty():
