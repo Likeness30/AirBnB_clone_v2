@@ -17,8 +17,6 @@ class HBNBCommand(cmd.Cmd):
 
     # determines prompt for interactive/non-interactive modes
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
-
-
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
     types = {
              'number_rooms': int, 'number_bathrooms': int,
@@ -31,6 +29,7 @@ class HBNBCommand(cmd.Cmd):
         'Review': Review
     }
     model = classes
+
     def preloop(self):
         """Prints if isatty is false"""
         if not sys.__stdin__.isatty():
