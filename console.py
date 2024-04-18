@@ -110,12 +110,13 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(self, args):
+    def do_create(self, argument):
         print(model)
 
         """This part does validation and parsing the
         arguments into and object that is usable"""
-        new_instance = HBNBCommand.model[args]()
+        class_name, params = HBNBCommand.parse_params(argument)
+        new_instance = HBNBCommand.model[class_name](**params)
         storage.save()
         print(new_instance.id)
         storage.save()
@@ -313,6 +314,23 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+    @staticmethod
+    def parse_params(params_str):
+        """Parse and check parameters string."""
+        class_name = ''
+        param = {}
+        if not params_str:
+            return False
+        param = params_str.split()
+        class_name = param[0]
+        param = param[1:]
+        param_obj = {}
+        for i in range(len(param)):
+            key, value = param[i].split('=')
+            value = value[1:-1]
+            param_obj[key] = value
+        return class_name, param_obj
+    
 
 
 if __name__ == "__main__":
