@@ -9,7 +9,7 @@ class FileStorage:
     __objects = {}
 
     def delete(self, obj=None):
-        """Delete obj from __objects if it's inside"""
+        """Delete obj from __objects if it's inside it"""
         if obj is None:
             return
         for key, value in list(self.__objects.items()):
