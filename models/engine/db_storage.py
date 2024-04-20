@@ -23,9 +23,12 @@ class DBStorage:
             'host': os.environ.get('HBNB_MYSQL_HOST', 'localhost'),
             'database': os.environ['HBNB_MYSQL_DB'],
         }
-        url = f"""mysql+mysqldb://{db_params['user']}:
-{db_params['password']}@{db_params['host']}/
-{db_params['database']}"""
+        url = """mysql+mysqldb://{}:{}@{}/{}""".format(db_params['user'],
+                                                       db_params['password'],
+                                                       db_params['host'],
+                                                       db_params['database']
+                                                       )
+
         self.__engine = create_engine(url, pool_pre_ping=True)
 
         if os.getenv("HBNB_ENV") == "test":
