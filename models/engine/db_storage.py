@@ -48,7 +48,8 @@ class DBStorage:
         data = {}
 
         if cls:
-            for obj in self.__session.query(cls):
+            for obj in self.__session.query(DBStorage.classes[cls]).all():
+                print(cls__table__)
                 key = obj.__class__.__name__ + '.' + obj.id
                 data[key] = obj
         else:
